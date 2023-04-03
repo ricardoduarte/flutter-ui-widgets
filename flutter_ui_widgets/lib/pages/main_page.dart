@@ -1,9 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_widgets/models/article.dart';
+import 'package:flutter_ui_widgets/pages/home_page.dart';
+import 'package:flutter_ui_widgets/pages/inbox_page.dart';
 import 'package:flutter_ui_widgets/widgets/article_card.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  final List<Widget> _pages = [
+    const HomePage(),
+    const InboxPage(),
+  ];
+
+  int _selectedIndex = 0;
+
+  _onTapped (int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +34,24 @@ class MainPage extends StatelessWidget {
           width: 180.0,
         ),
       ),
-      body: ArticleCard(article: articles[1]),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [..._pages],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        onTap: _onTapped,
+        items: const [
+          BottomNavigationBarItem(
+            label: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: 'Inbox',
+            icon: Icon(Icons.mail),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('Clicked!');
